@@ -3,7 +3,7 @@ const {DexContractABI} = require("./abi/DexContractABI");
 const {AAWalletABI} = require("./abi/AAWalletABI");
 
 const GESIA_RPC_URL = "http://43.200.218.66:8445";
-const dexContractAddress = "0x0B77C44BEB285CD2a07e37bbe95235e6e3BbfAF1";
+const dexContractAddress = "0xDd1a48e144eF67eb0E04364B0553264a3465b707";
 
 async function sleep(millis) {
     return new Promise(resolve => setTimeout(resolve, millis));
@@ -54,12 +54,33 @@ async function saveTransactions(results, web3) {
         }
         switch (result.event) {
             case 'BidEvent' :
+                const bidUser = result.returnValues['user'];
+                const bidNftContractAddress = result.returnValues['token_contract_address'];
+                const bidTokenContractAddress = result.returnValues['market_contract_address'];
+                const bidNftTokenId = result.returnValues['token_id'];
+                const bidAmount = result.returnValues['amount'];
+                const bidPrice = result.returnValues['price']; // in wei
+                const bidOrderId = result.returnValues['orderId'];
                 console.log("bidResults", result.returnValues)
                 break;
             case 'AskEvent':
+                const askUser = result.returnValues['user'];
+                const askNftContractAddress = result.returnValues['token_contract_address'];
+                const askTokenContractAddress = result.returnValues['market_contract_address'];
+                const askNftTokenId = result.returnValues['token_id'];
+                const askAmount = result.returnValues['amount'];
+                const askPrice = result.returnValues['price']; // in wei
+                const askOrderId = result.returnValues['orderId'];
                 console.log("askResults", result.returnValues)
                 break;
             case 'CancelEvent':
+                const cancelUser = result.returnValues['user'];
+                const cancelNftContractAddress = result.returnValues['token_contract_address'];
+                const cancelTokenContractAddress = result.returnValues['market_contract_address'];
+                const cancelNftTokenId = result.returnValues['token_id'];
+                const cancelAmount = result.returnValues['amount'];
+                const cancelPrice = result.returnValues['price']; // in wei
+                const cancelOrderId = result.returnValues['orderId'];
                 console.log("cancelResults", result.returnValues)
                 break;
             case 'TradeExecuteEvent':

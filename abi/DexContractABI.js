@@ -45,6 +45,12 @@ const DexContractABI = [
             },
             {
                 "indexed": false,
+                "internalType": "address",
+                "name": "market_contract_address",
+                "type": "address"
+            },
+            {
+                "indexed": false,
                 "internalType": "uint256",
                 "name": "orderId",
                 "type": "uint256"
@@ -88,6 +94,12 @@ const DexContractABI = [
             },
             {
                 "indexed": false,
+                "internalType": "address",
+                "name": "market_contract_address",
+                "type": "address"
+            },
+            {
+                "indexed": false,
                 "internalType": "uint256",
                 "name": "orderId",
                 "type": "uint256"
@@ -128,6 +140,12 @@ const DexContractABI = [
                 "internalType": "uint256",
                 "name": "price",
                 "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "market_contract_address",
+                "type": "address"
             },
             {
                 "indexed": false,
@@ -215,6 +233,11 @@ const DexContractABI = [
                 "internalType": "uint256",
                 "name": "price",
                 "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "market_contract_address",
+                "type": "address"
             }
         ],
         "name": "askOrder",
@@ -243,6 +266,11 @@ const DexContractABI = [
                 "internalType": "uint256",
                 "name": "price",
                 "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "market_contract_address",
+                "type": "address"
             }
         ],
         "name": "bidOrder",
@@ -301,6 +329,11 @@ const DexContractABI = [
                         "type": "uint256"
                     },
                     {
+                        "internalType": "address",
+                        "name": "marketContractAddress",
+                        "type": "address"
+                    },
+                    {
                         "internalType": "bool",
                         "name": "isBuyOrder",
                         "type": "bool"
@@ -311,7 +344,7 @@ const DexContractABI = [
                         "type": "bool"
                     }
                 ],
-                "internalType": "struct IDexKRWProtocol.Order",
+                "internalType": "struct IDexProtocol.Order",
                 "name": "",
                 "type": "tuple"
             }
@@ -551,6 +584,11 @@ const DexContractABI = [
                 "internalType": "uint256",
                 "name": "price",
                 "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "marketContractAddress",
+                "type": "address"
             },
             {
                 "internalType": "bool",
