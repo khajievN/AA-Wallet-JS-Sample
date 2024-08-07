@@ -3,23 +3,21 @@ const {DexContractABI} = require("./abi/DexContractABI");
 const {AAWalletABI} = require("./abi/AAWalletABI");
 const {Carbon1155ABI} = require("./abi/Carbon1155ABI");
 const {ERC20} = require("./abi/ERC20");
-
-const GESIA_RPC_URL = "http://43.200.218.66:8445";
-const OWNER_2_PRIVATE_KEY = "";
-const OWNER_2_ADDRESS = "";
-const dexContractAddress = "0xDd1a48e144eF67eb0E04364B0553264a3465b707";
+const {GESIA_RPC_URL, OWNER_2_PRIVATE_KEY, DEX_CONTRACT_ADDRESS, NZC_CONTRACT_ADDRESS, CARBON_NFT_CONTRACT_ADDRESS,
+    AA_WALLET_ADDRESS
+} = require("./consts");
 
 
 let web3 = new Web3(new Web3.providers.HttpProvider(GESIA_RPC_URL)); // gesia RPC url
-const dexContract = new web3.eth.Contract(DexContractABI, dexContractAddress);
+const dexContract = new web3.eth.Contract(DexContractABI, DEX_CONTRACT_ADDRESS);
+let account = web3.eth.accounts.privateKeyToAccount(OWNER_2_PRIVATE_KEY);
+let wallet = web3.eth.accounts.wallet.add(account);
 
 async function createBidOrder(aaWalletAddress, nftContractAddress, tokenId, amount, price, tokenContractAddress) {
     try {
-        const destination = dexContractAddress;
+        const destination = DEX_CONTRACT_ADDRESS;
         const value = 0;
         const data = dexContract.methods.bidOrder(nftContractAddress, tokenId, amount, price, tokenContractAddress).encodeABI();
-        let account = web3.eth.accounts.privateKeyToAccount(OWNER_2_PRIVATE_KEY);
-        let wallet = web3.eth.accounts.wallet.add(account);
         const gasPrice = await web3.eth.getGasPrice();
         let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
         const aaWalletContract = new web3.eth.Contract(AAWalletABI, aaWalletAddress);
@@ -47,21 +45,19 @@ async function checkBalanceNft(aaWalletAddress, nftContractAddress, tokenId) {
 
 async function checkAllowanceToken(aaWalletAddress, tokenContractAddress) {
     const nzcContract = new web3.eth.Contract(ERC20, tokenContractAddress);
-    return await nzcContract.methods.allowance(aaWalletAddress, dexContractAddress).call();
+    return await nzcContract.methods.allowance(aaWalletAddress, DEX_CONTRACT_ADDRESS).call();
 }
 
 async function checkAllowanceNFT(aaWalletAddress, tokenContractAddress) {
     const carbon1155Contract = new web3.eth.Contract(Carbon1155ABI, tokenContractAddress);
-    const isAllowanceExist = await carbon1155Contract.methods.isApprovedForAll(aaWalletAddress, dexContractAddress).call();
+    const isAllowanceExist = await carbon1155Contract.methods.isApprovedForAll(aaWalletAddress, DEX_CONTRACT_ADDRESS).call();
     console.log("isAllowanceExist", isAllowanceExist);
     return isAllowanceExist;
 }
 
 async function giveAllowanceToken(aaWalletAddress, tokenContractAddress) {
     const tokenContract = new web3.eth.Contract(ERC20, tokenContractAddress);
-    const data = tokenContract.methods.approve(dexContractAddress, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").encodeABI();
-    let account = web3.eth.accounts.privateKeyToAccount(OWNER_2_PRIVATE_KEY);
-    let wallet = web3.eth.accounts.wallet.add(account);
+    const data = tokenContract.methods.approve(DEX_CONTRACT_ADDRESS, "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").encodeABI();
     const gasPrice = await web3.eth.getGasPrice();
     let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
     const aaWalletContract = new web3.eth.Contract(AAWalletABI, aaWalletAddress);
@@ -78,9 +74,7 @@ async function giveAllowanceToken(aaWalletAddress, tokenContractAddress) {
 
 async function giveAllowanceNFT(aaWalletAddress, nftContractAddress) {
     const carbon1155Contract = new web3.eth.Contract(Carbon1155ABI, nftContractAddress);
-    const data = carbon1155Contract.methods.setApprovalForAll(dexContractAddress, true).encodeABI();
-    let account = web3.eth.accounts.privateKeyToAccount(OWNER_2_PRIVATE_KEY);
-    let wallet = web3.eth.accounts.wallet.add(account);
+    const data = carbon1155Contract.methods.setApprovalForAll(DEX_CONTRACT_ADDRESS, true).encodeABI();
     const gasPrice = await web3.eth.getGasPrice();
     let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
     const aaWalletContract = new web3.eth.Contract(AAWalletABI, aaWalletAddress);
@@ -97,11 +91,9 @@ async function giveAllowanceNFT(aaWalletAddress, nftContractAddress) {
 
 async function createAskOrder(aaWalletAddress, nftContractAddress, tokenId, amount, price) {
     try {
-        const destination = dexContractAddress;
+        const destination = DEX_CONTRACT_ADDRESS;
         const value = 0;
         const data = dexContract.methods.askOrder(nftContractAddress, tokenId, amount, price, tokenContractAddress).encodeABI();
-        let account = web3.eth.accounts.privateKeyToAccount(OWNER_2_PRIVATE_KEY);
-        let wallet = web3.eth.accounts.wallet.add(account);
         const gasPrice = await web3.eth.getGasPrice();
         let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
         const aaWalletContract = new web3.eth.Contract(AAWalletABI, aaWalletAddress);
@@ -117,12 +109,9 @@ async function createAskOrder(aaWalletAddress, nftContractAddress, tokenId, amou
 }
 
 async function cancelOrder(orderId) {
-    const destination = dexContractAddress;
+    const destination = DEX_CONTRACT_ADDRESS;
     const value = 0;
     const data = dexContract.methods.cancelOrder(orderId).encodeABI();
-
-    let account = web3.eth.accounts.privateKeyToAccount(OWNER_2_PRIVATE_KEY);
-    let wallet = web3.eth.accounts.wallet.add(account);
     const gasPrice = await web3.eth.getGasPrice();
     let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
     const aaWalletContract = new web3.eth.Contract(AAWalletABI, aaWalletAddress);
@@ -135,8 +124,6 @@ async function cancelOrder(orderId) {
 }
 
 async function executeOrder(bidOrderId, askOrderId, orderAmount) {
-    let account = web3.eth.accounts.privateKeyToAccount(OWNER_2_PRIVATE_KEY);
-    let wallet = web3.eth.accounts.wallet.add(account);
     const gasPrice = await web3.eth.getGasPrice();
     let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
     const gasLimit = await dexContract.methods.executeOrder(bidOrderId, askOrderId, orderAmount).estimateGas({
@@ -148,9 +135,13 @@ async function executeOrder(bidOrderId, askOrderId, orderAmount) {
 }
 
 
-const tokenContractAddress = "0xfAf9E5C26725B947E02395da50C521ff5E52f51A"; // NZC Token Contract
-const nftContractAddress = "0x409caC72821207CFAe4068E23Be3d33190Ae9ad6"; // Carbon NFT Contract
-const aaWalletAddress = "0xDcABF6b9d4C0b94c8191e38b3F9608C772Bd85ed"; // AA Wallet address
+
+
+
+
+const tokenContractAddress = NZC_CONTRACT_ADDRESS; // NZC Token Contract
+const nftContractAddress = CARBON_NFT_CONTRACT_ADDRESS; // Carbon NFT Contract
+const aaWalletAddress = AA_WALLET_ADDRESS; // AA Wallet address
 
 
 // ------------------- CREATE ORDER ----------------------
@@ -177,7 +168,6 @@ async function testBidOrder() {
     console.log("bidOrderResult", result);
 }
 
-// testBidOrder()
 
 // ------------------- ASK ORDER ----------------------
 
@@ -205,8 +195,6 @@ async function testAskOrder() {
     console.log("askOrderResult", result);
 }
 
-// testAskOrder()
-
 // ------------------- CANCEL ORDER ----------------------
 
 // 1. MAKE CANCEL ORDER
@@ -216,15 +204,13 @@ async function testCancelOrder() {
     console.log("cancelOrderResult", result);
 }
 
-testCancelOrder();
-
 // ------------------- EXECUTE ORDER ----------------------
 
 // 1. MAKE EXECUTE ORDER
 async function testExecuteOrder() {
     const bidOrderId = 1;
     const askOrderId = 2;
-    const orderAmount = 100;
+    const orderAmount = 100; // NFT amount
     const result = await executeOrder(bidOrderId, askOrderId, orderAmount)
     console.log("executeOrderResult", result);
 }

@@ -1,9 +1,7 @@
 const Web3 = require("web3");
 const {DexContractABI} = require("./abi/DexContractABI");
-const {AAWalletABI} = require("./abi/AAWalletABI");
+const {DEX_CONTRACT_ADDRESS, GESIA_RPC_URL} = require("./consts");
 
-const GESIA_RPC_URL = "http://43.200.218.66:8445";
-const dexContractAddress = "0xDd1a48e144eF67eb0E04364B0553264a3465b707";
 
 async function sleep(millis) {
     return new Promise(resolve => setTimeout(resolve, millis));
@@ -12,7 +10,7 @@ async function sleep(millis) {
 
 async function startEthereumBridgeIndexingNew() {
     const web3 = new Web3(new Web3.providers.HttpProvider(GESIA_RPC_URL));
-    const contract = new web3.eth.Contract(DexContractABI, dexContractAddress);
+    const contract = new web3.eth.Contract(DexContractABI, DEX_CONTRACT_ADDRESS);
 
     while (true) {
         try {
@@ -84,6 +82,15 @@ async function saveTransactions(results, web3) {
                 console.log("cancelResults", result.returnValues)
                 break;
             case 'TradeExecuteEvent':
+                const tradeAskUser = result.returnValues['seller'];
+                const tradeBidUser = result.returnValues['buyer'];
+                const tradeNftContractAddress = result.returnValues['token_contract_address'];
+                const tradeTokenContractAddress = result.returnValues['market_contract_address'];
+                const tradeTokenId = result.returnValues['token_id'];
+                const tradeAmount = result.returnValues['executedAmount'];
+                const tradePrice = result.returnValues['executedPrice'];
+                const tradeAskOrderId = result.returnValues['askOrderId'];
+                const tradeBidOrderId = result.returnValues['bidOrderId'];
                 console.log("tradeResults", result.returnValues)
                 break;
         }
