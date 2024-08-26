@@ -163,6 +163,25 @@ const DexContractABI = [
             {
                 "indexed": true,
                 "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
                 "name": "seller",
                 "type": "address"
             },
@@ -176,6 +195,12 @@ const DexContractABI = [
                 "indexed": false,
                 "internalType": "address",
                 "name": "token_contract_address",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "market_contract_address",
                 "type": "address"
             },
             {
@@ -233,11 +258,6 @@ const DexContractABI = [
                 "internalType": "uint256",
                 "name": "price",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "market_contract_address",
-                "type": "address"
             }
         ],
         "name": "askOrder",
@@ -266,16 +286,11 @@ const DexContractABI = [
                 "internalType": "uint256",
                 "name": "price",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "market_contract_address",
-                "type": "address"
             }
         ],
         "name": "bidOrder",
         "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -292,6 +307,19 @@ const DexContractABI = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "coin_address",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -304,7 +332,7 @@ const DexContractABI = [
             {
                 "components": [
                     {
-                        "internalType": "address",
+                        "internalType": "address payable",
                         "name": "user",
                         "type": "address"
                     },
@@ -344,7 +372,7 @@ const DexContractABI = [
                         "type": "bool"
                     }
                 ],
-                "internalType": "struct IDexProtocol.Order",
+                "internalType": "struct IDexCoinProtocol.Order",
                 "name": "",
                 "type": "tuple"
             }
@@ -561,7 +589,7 @@ const DexContractABI = [
         "name": "orders",
         "outputs": [
             {
-                "internalType": "address",
+                "internalType": "address payable",
                 "name": "user",
                 "type": "address"
             },
@@ -605,6 +633,78 @@ const DexContractABI = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMaxAmount",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMaxPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_minAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMinAmount",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_minPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMinPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "bytes4",
@@ -622,6 +722,23 @@ const DexContractABI = [
         ],
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "stateMutability": "payable",
+        "type": "receive"
     }
 ];
 
