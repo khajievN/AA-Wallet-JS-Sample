@@ -80,10 +80,10 @@ async function createAskOrder(aaWalletAddress, nftContractAddress, tokenId, amou
     }
 }
 
-async function cancelOrder(orderId) {
+async function cancelOrder(orderIds) {
     const destination = DEX_CONTRACT_ADDRESS;
     const value = 0;
-    const data = dexContract.methods.cancelOrder(orderId).encodeABI();
+    const data = dexContract.methods.cancelOrder(orderIds).encodeABI();
     const gasPrice = await web3.eth.getGasPrice();
     let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
     const aaWalletContract = new web3.eth.Contract(AAWalletABI, aaWalletAddress);
@@ -95,13 +95,13 @@ async function cancelOrder(orderId) {
     });
 }
 
-async function executeOrder(bidOrderId, askOrderId, orderAmount) {
+async function executeOrder(bidOrderIds, askOrderIds, orderAmounts) {
     const gasPrice = await web3.eth.getGasPrice();
     let nonce = await web3.eth.getTransactionCount(account.address, 'pending');
-    const gasLimit = await dexContract.methods.executeOrder(bidOrderId, askOrderId, orderAmount).estimateGas({
+    const gasLimit = await dexContract.methods.executeOrder(bidOrderIds, askOrderIds, orderAmounts).estimateGas({
         from: wallet.address, nonce: nonce
     });
-    return await dexContract.methods.executeOrder(bidOrderId, askOrderId, orderAmount).send({
+    return await dexContract.methods.executeOrder(bidOrderIds, askOrderIds, orderAmounts).send({
         from: wallet.address, gas: gasLimit, gasPrice: gasPrice, nonce: nonce++
     });
 }

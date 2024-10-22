@@ -54,7 +54,6 @@ async function saveTransactions(results, web3) {
             case 'BidEvent' :
                 const bidUser = result.returnValues['user'];
                 const bidNftContractAddress = result.returnValues['token_contract_address'];
-                const bidTokenContractAddress = result.returnValues['market_contract_address'];
                 const bidNftTokenId = result.returnValues['token_id'];
                 const bidAmount = result.returnValues['amount'];
                 const bidPrice = result.returnValues['price']; // in wei
@@ -64,7 +63,6 @@ async function saveTransactions(results, web3) {
             case 'AskEvent':
                 const askUser = result.returnValues['user'];
                 const askNftContractAddress = result.returnValues['token_contract_address'];
-                const askTokenContractAddress = result.returnValues['market_contract_address'];
                 const askNftTokenId = result.returnValues['token_id'];
                 const askAmount = result.returnValues['amount'];
                 const askPrice = result.returnValues['price']; // in wei
@@ -74,7 +72,6 @@ async function saveTransactions(results, web3) {
             case 'CancelEvent':
                 const cancelUser = result.returnValues['user'];
                 const cancelNftContractAddress = result.returnValues['token_contract_address'];
-                const cancelTokenContractAddress = result.returnValues['market_contract_address'];
                 const cancelNftTokenId = result.returnValues['token_id'];
                 const cancelAmount = result.returnValues['amount'];
                 const cancelPrice = result.returnValues['price']; // in wei
@@ -85,7 +82,6 @@ async function saveTransactions(results, web3) {
                 const tradeAskUser = result.returnValues['seller'];
                 const tradeBidUser = result.returnValues['buyer'];
                 const tradeNftContractAddress = result.returnValues['token_contract_address'];
-                const tradeTokenContractAddress = result.returnValues['market_contract_address'];
                 const tradeTokenId = result.returnValues['token_id'];
                 const tradeAmount = result.returnValues['executedAmount'];
                 const tradePrice = result.returnValues['executedPrice'];
